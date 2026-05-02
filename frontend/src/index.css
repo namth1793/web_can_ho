@@ -1,0 +1,41 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  font-family: 'Be Vietnam Pro', sans-serif;
+  color: #1a1a1a;
+}
+
+@layer components {
+  .btn-primary {
+    @apply bg-accent text-white font-bold py-3 px-6 rounded hover:bg-red-700 transition-colors;
+  }
+  .btn-outline {
+    @apply border-2 border-white text-white font-bold py-3 px-6 rounded hover:bg-white hover:text-primary transition-colors;
+  }
+  .section-title {
+    @apply text-2xl md:text-3xl font-bold text-center text-gray-800 mb-2;
+  }
+  .section-divider {
+    @apply w-12 h-1 bg-accent mx-auto mb-8;
+  }
+}
+
+.hot-badge {
+  background: #E53935;
+  color: white;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 3px;
+  letter-spacing: 0.5px;
+}
+
+html {
+  scroll-behavior: smooth;
+}
