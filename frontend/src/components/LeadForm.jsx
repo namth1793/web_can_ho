@@ -45,7 +45,7 @@ export default function LeadForm() {
             value={form.area}
             onChange={e => setForm({ ...form, area: e.target.value })}
             className="flex-1 px-4 py-3 rounded text-gray-600 text-sm focus:outline-none focus:ring-2 focus:ring-gold bg-white">
-            <option value="">Chọn khu vực</option>
+            <option value="">Chọn dự án</option>
             <option value="dai-thanh">Đại Thanh</option>
             <option value="linh-dam">Linh Đàm</option>
             <option value="kim-van-kim-lu">Kim Văn - Kim Lú</option>

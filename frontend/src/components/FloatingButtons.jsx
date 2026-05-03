@@ -2,7 +2,7 @@ export default function FloatingButtons() {
   return (
     <div className="fixed right-4 bottom-24 z-50 flex flex-col gap-3">
       {/* Call button */}
-      <a href="tel:0973123456"
+      <a href="tel:0973883550"
         className="flex flex-col items-center bg-accent text-white rounded-full w-14 h-14 shadow-lg hover:bg-red-700 transition-colors group"
         title="Gọi ngay">
         <div className="flex items-center justify-center flex-1">
@@ -14,7 +14,7 @@ export default function FloatingButtons() {
       </a>
 
       {/* Zalo button */}
-      <a href="https://zalo.me/0973123456" target="_blank" rel="noreferrer"
+      <a href="https://zalo.me/0973883550" target="_blank" rel="noreferrer"
         className="flex flex-col items-center bg-blue-500 text-white rounded-full w-14 h-14 shadow-lg hover:bg-blue-600 transition-colors"
         title="Chat Zalo">
         <div className="flex items-center justify-center flex-1">

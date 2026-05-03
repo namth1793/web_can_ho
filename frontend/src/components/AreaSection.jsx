@@ -35,7 +35,7 @@ export default function AreaSection() {
   return (
     <section className="py-12 bg-white">
       <div className="max-w-7xl mx-auto px-4">
-        <h2 className="section-title">CHỌN KHU VỰC BẠN QUAN TÂM</h2>
+        <h2 className="section-title">DỰ ÁN BẠN QUAN TÂM</h2>
         <div className="section-divider"></div>
         <div className="grid grid-cols-2 lg:grid-cols-4 gap-4">
           {areas.map(area => (
