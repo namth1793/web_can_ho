@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import axios from 'axios';
+import api from '../lib/api';
 
 const ADMIN_PASSWORD = 'oanhomes2024';
 
@@ -42,7 +42,7 @@ export default function Admin() {
   useEffect(() => {
     if (!authed) return;
     setLoading(true);
-    axios.get('/api/admin/contacts', { headers: { 'x-admin-key': ADMIN_PASSWORD } })
+    api.get('/api/admin/contacts', { headers: { 'x-admin-key': ADMIN_PASSWORD } })
       .then(r => setContacts(r.data))
       .finally(() => setLoading(false));
   }, [authed]);

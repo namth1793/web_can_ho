@@ -3,9 +3,9 @@ const cors = require('cors');
 const { setupDatabase } = require('./db/setup');
 
 const app = express();
-const PORT = 5021;
+const PORT = process.env.PORT || 5021;
 
-app.use(cors());
+app.use(cors({ origin: '*' }));
 app.use(express.json());
 
 setupDatabase();

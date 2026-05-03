@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import axios from 'axios';
+import api from '../lib/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FloatingButtons from '../components/FloatingButtons';
@@ -27,7 +27,7 @@ export default function ApartmentList({ area, title }) {
     const params = {};
     if (area) params.area = area;
     setLoading(true);
-    axios.get('/api/apartments', { params })
+    api.get('/api/apartments', { params })
       .then(r => { setAll(r.data); setLoading(false); })
       .catch(() => setLoading(false));
   }, [area]);

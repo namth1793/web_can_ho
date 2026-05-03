@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { useParams, Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../lib/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FloatingButtons from '../components/FloatingButtons';
@@ -21,7 +21,7 @@ export default function ApartmentDetail() {
 
   useEffect(() => {
     setLoading(true);
-    axios.get(`/api/apartments/${id}`)
+    api.get(`/api/apartments/${id}`)
       .then(r => {
         const { related: rel, ...data } = r.data;
         setApt(data);
@@ -35,7 +35,7 @@ export default function ApartmentDetail() {
   const handleContact = async (e) => {
     e.preventDefault();
     if (!form.phone) return;
-    await axios.post('/api/contacts', {
+    await api.post('/api/contacts', {
       phone: form.phone,
       area: apt?.area_slug,
       message: `Quan tâm căn: ${apt?.title}. ${form.message}`,

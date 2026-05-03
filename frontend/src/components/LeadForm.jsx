@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../lib/api';
 
 export default function LeadForm() {
   const [form, setForm] = useState({ phone: '', area: '', price_range: '', bedrooms: '' });
@@ -11,7 +11,7 @@ export default function LeadForm() {
     if (!form.phone) { setMsg('Vui lòng nhập số điện thoại!'); return; }
     setLoading(true);
     try {
-      await axios.post('/api/contacts', form);
+      await api.post('/api/contacts', form);
       setMsg('Đã ghi nhận! Chúng tôi sẽ gọi lại ngay.');
       setForm({ phone: '', area: '', price_range: '', bedrooms: '' });
     } catch {

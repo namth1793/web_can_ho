@@ -1,12 +1,12 @@
 import { useEffect, useState } from 'react';
-import axios from 'axios';
+import api from '../lib/api';
 
 export default function Testimonials() {
   const [items, setItems] = useState([]);
   const [idx, setIdx] = useState(0);
 
   useEffect(() => {
-    axios.get('/api/testimonials').then(r => setItems(r.data)).catch(() => {});
+    api.get('/api/testimonials').then(r => setItems(r.data)).catch(() => {});
   }, []);
 
   if (items.length === 0) return null;

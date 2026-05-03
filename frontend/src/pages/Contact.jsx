@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import axios from 'axios';
+import api from '../lib/api';
 import Navbar from '../components/Navbar';
 import Footer from '../components/Footer';
 import FloatingButtons from '../components/FloatingButtons';
@@ -14,7 +14,7 @@ export default function Contact() {
     if (!form.phone) return;
     setLoading(true);
     try {
-      await axios.post('/api/contacts', form);
+      await api.post('/api/contacts', form);
       setSent(true);
     } catch {
       alert('Có lỗi xảy ra. Vui lòng thử lại!');

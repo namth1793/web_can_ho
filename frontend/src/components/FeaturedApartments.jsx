@@ -1,13 +1,13 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
+import api from '../lib/api';
 import ApartmentCard from './ApartmentCard';
 
 export default function FeaturedApartments() {
   const [apartments, setApartments] = useState([]);
 
   useEffect(() => {
-    axios.get('/api/apartments?is_hot=1&limit=4')
+    api.get('/api/apartments?is_hot=1&limit=4')
       .then(r => setApartments(r.data))
       .catch(() => {});
   }, []);
