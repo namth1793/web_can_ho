@@ -27,12 +27,12 @@ export default function Footer() {
           {/* Contact */}
           <div>
             <h4 className="font-bold text-sm uppercase mb-4 text-white/90 tracking-wide">LIÊN HỆ</h4>
-            <ul className="space-y-2 text-sm text-white/70">
+            <ul className="space-y-2.5 text-sm text-white/70">
               <li className="flex items-start gap-2">
                 <svg className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
                   <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                 </svg>
-                0973 883 550
+                <a href="tel:0973883550" className="hover:text-gold transition-colors">0973 883 550</a>
               </li>
               <li className="flex items-start gap-2">
                 <svg className="w-4 h-4 text-gold mt-0.5 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
@@ -54,11 +54,12 @@ export default function Footer() {
           <div>
             <h4 className="font-bold text-sm uppercase mb-4 text-white/90 tracking-wide">DANH MỤC</h4>
             <ul className="space-y-2 text-sm text-white/70">
-              <li><Link to="/chung-cu-ha-noi" className="hover:text-gold transition-colors">Chung cư Hà Nội</Link></li>
-              <li><Link to="/dai-thanh" className="hover:text-gold transition-colors">Chung cư Đại Thanh</Link></li>
-              <li><Link to="/linh-dam" className="hover:text-gold transition-colors">Chung cư Linh Đàm</Link></li>
-              <li><Link to="/kim-van-kim-lu" className="hover:text-gold transition-colors">Kim Văn - Kim Lú</Link></li>
-              <li><Link to="/lien-he" className="hover:text-gold transition-colors">Liên hệ</Link></li>
+              <li><Link to="/mua-can-ho" className="hover:text-gold transition-colors">Mua căn hộ</Link></li>
+              <li><Link to="/cho-thue-can-ho" className="hover:text-gold transition-colors">Cho thuê căn hộ</Link></li>
+              <li><Link to="/du-an/dai-thanh" className="hover:text-gold transition-colors">Chung cư Đại Thanh</Link></li>
+              <li><Link to="/du-an/linh-dam" className="hover:text-gold transition-colors">KĐT Linh Đàm</Link></li>
+              <li><Link to="/du-an/kim-van-kim-lu" className="hover:text-gold transition-colors">Kim Văn – Kim Lũ</Link></li>
+              <li><Link to="/lien-he" className="hover:text-gold transition-colors">Liên hệ tư vấn</Link></li>
             </ul>
           </div>
 
@@ -74,10 +75,18 @@ export default function Footer() {
           </div>
         </div>
       </div>
-      <div className="border-t border-white/10 py-4">
-        <p className="text-center text-white/50 text-xs">
-          © 2024 ChungCuGiaReHN.vn - All rights reserved.
-        </p>
+
+      {/* Bottom bar */}
+      <div className="border-t border-white/10 py-3.5">
+        <div className="max-w-7xl mx-auto px-4 flex items-center justify-between gap-4">
+          <p className="text-white/40 text-xs">
+            © 2024 ChungCuGiaReHN.vn – All rights reserved.
+          </p>
+          <Link to="/admin"
+            className="text-white/20 hover:text-white/50 text-xs transition-colors select-none">
+            admin
+          </Link>
+        </div>
       </div>
     </footer>
   );
