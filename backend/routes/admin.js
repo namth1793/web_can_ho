@@ -4,6 +4,11 @@ const { db } = require('../db/setup');
 
 const ADMIN_KEY = 'oanhomes2024';
 
+// Notify all SSE clients of a change
+function notify(req) {
+  if (req.app.locals.notifyChange) req.app.locals.notifyChange();
+}
+
 function auth(req, res) {
   if (req.headers['x-admin-key'] !== ADMIN_KEY) {
     res.status(401).json({ message: 'Unauthorized' });
@@ -22,6 +27,7 @@ router.get('/contacts', (req, res) => {
 router.delete('/contacts/:id', (req, res) => {
   if (!auth(req, res)) return;
   db.prepare('DELETE FROM contacts WHERE id = ?').run(req.params.id);
+  notify(req);
   res.json({ ok: true });
 });
 
@@ -82,6 +88,7 @@ router.post('/apartments', (req, res) => {
 
   const created = db.prepare('SELECT * FROM apartments WHERE id = ?').get(result.lastInsertRowid);
   try { if (created.images) created.images = JSON.parse(created.images); } catch { created.images = []; }
+  notify(req);
   res.json(created);
 });
 
@@ -120,12 +127,14 @@ router.put('/apartments/:id', (req, res) => {
     is_hot ? 1 : 0, status || 'available',
     req.params.id
   );
+  notify(req);
   res.json({ ok: true });
 });
 
 router.delete('/apartments/:id', (req, res) => {
   if (!auth(req, res)) return;
   db.prepare('DELETE FROM apartments WHERE id = ?').run(req.params.id);
+  notify(req);
   res.json({ ok: true });
 });
 
@@ -154,6 +163,7 @@ router.post('/projects', (req, res) => {
     const result = db.prepare(
       'INSERT INTO projects (name, slug, parent_id, count_text, image, description, sort_order) VALUES (?,?,?,?,?,?,?)'
     ).run(name, slug, parent_id, count_text || '', image || '', description || '', sort_order || 0);
+    notify(req);
     res.json({ id: result.lastInsertRowid, ok: true });
   } catch (e) {
     res.status(400).json({ message: e.message });
@@ -165,17 +175,17 @@ router.put('/projects/:id', (req, res) => {
   const { name, count_text, image, description, sort_order } = req.body;
   db.prepare('UPDATE projects SET name=?, count_text=?, image=?, description=?, sort_order=? WHERE id=?')
     .run(name, count_text || '', image || '', description || '', sort_order || 0, req.params.id);
+  notify(req);
   res.json({ ok: true });
 });
 
 router.delete('/projects/:id', (req, res) => {
   if (!auth(req, res)) return;
   const id = req.params.id;
-  // Reassign child projects to null parent
   db.prepare('UPDATE projects SET parent_id = NULL WHERE parent_id = ?').run(id);
-  // Detach apartments (keep them, just clear project link)
   db.prepare("UPDATE apartments SET project_id = NULL, project_name = '', project_slug = '' WHERE project_id = ?").run(id);
   db.prepare('DELETE FROM projects WHERE id = ?').run(id);
+  notify(req);
   res.json({ ok: true });
 });
 
@@ -193,6 +203,7 @@ router.post('/testimonials', (req, res) => {
   const result = db.prepare(
     'INSERT INTO testimonials (name, location, avatar, content, rating) VALUES (?,?,?,?,?)'
   ).run(name, location || '', avatar || '', content, Number(rating) || 5);
+  notify(req);
   res.json({ id: result.lastInsertRowid, ok: true });
 });
 
@@ -201,12 +212,14 @@ router.put('/testimonials/:id', (req, res) => {
   const { name, location, avatar, content, rating } = req.body;
   db.prepare('UPDATE testimonials SET name=?, location=?, avatar=?, content=?, rating=? WHERE id=?')
     .run(name, location || '', avatar || '', content, Number(rating) || 5, req.params.id);
+  notify(req);
   res.json({ ok: true });
 });
 
 router.delete('/testimonials/:id', (req, res) => {
   if (!auth(req, res)) return;
   db.prepare('DELETE FROM testimonials WHERE id = ?').run(req.params.id);
+  notify(req);
   res.json({ ok: true });
 });
 

@@ -1,4 +1,5 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import { RefreshProvider } from './contexts/RefreshContext';
 import Home from './pages/Home';
 import ApartmentList from './pages/ApartmentList';
 import ProjectPage from './pages/ProjectPage';
@@ -9,6 +10,7 @@ import ScrollToTop from './components/ScrollToTop';
 
 export default function App() {
   return (
+    <RefreshProvider>
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
@@ -24,5 +26,6 @@ export default function App() {
         <Route path="/chung-cu-ha-noi" element={<ApartmentList listingType="ban" title="Chung Cư Hà Nội" />} />
       </Routes>
     </BrowserRouter>
+    </RefreshProvider>
   );
 }

@@ -130,7 +130,7 @@ export default function ApartmentDetail() {
               </div>
 
               <h2 className="font-bold text-gray-800 mb-3">Mô tả chi tiết</h2>
-              <p className="text-gray-600 text-sm leading-relaxed">{apt.description}</p>
+              <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-wrap">{apt.description}</p>
             </div>
           </div>
 

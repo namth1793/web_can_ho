@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import api from '../lib/api';
+import { useRefreshSignal } from '../contexts/RefreshContext';
 
 const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1486325212027-8081e485255e?w=600&q=80';
 
 export default function AreaSection() {
   const [projects, setProjects] = useState([]);
+  const refresh = useRefreshSignal();
 
   useEffect(() => {
     api.get('/api/projects')
       .then(r => {
-        // Show top-level projects only
         setProjects(r.data.filter(p => !p.parent_id));
       })
       .catch(() => {});
-  }, []);
+  }, [refresh]);
 
   if (projects.length === 0) return null;
 

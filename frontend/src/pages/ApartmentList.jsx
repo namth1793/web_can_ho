@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import FloatingButtons from '../components/FloatingButtons';
 import ApartmentCard from '../components/ApartmentCard';
 import CTABar from '../components/CTABar';
+import { useRefreshSignal } from '../contexts/RefreshContext';
 
 const PRICE_RANGES = [
   { label: 'Tất cả giá', value: '' },
@@ -27,6 +28,7 @@ export default function ApartmentList({ listingType: listingTypeProp, title: tit
   const location = useLocation();
   const searchQ = searchParams.get('q') || '';
   const bedroomsParam = searchParams.get('bedrooms') || '';
+  const refresh = useRefreshSignal();
 
   const isSearch = location.pathname === '/tim-kiem';
   const isRent = listingTypeProp === 'thue';
@@ -46,7 +48,7 @@ export default function ApartmentList({ listingType: listingTypeProp, title: tit
       .then(r => setAll(r.data))
       .catch(() => setAll([]))
       .finally(() => setLoading(false));
-  }, [listingTypeProp, searchQ]);
+  }, [listingTypeProp, searchQ, refresh]);
 
   const filtered = all.filter(a => {
     if (filterBed && String(a.bedrooms) !== String(filterBed)) return false;

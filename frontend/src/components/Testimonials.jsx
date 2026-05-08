@@ -1,13 +1,15 @@
 import { useEffect, useState } from 'react';
 import api from '../lib/api';
+import { useRefreshSignal } from '../contexts/RefreshContext';
 
 export default function Testimonials() {
   const [items, setItems] = useState([]);
   const [idx, setIdx] = useState(0);
+  const refresh = useRefreshSignal();
 
   useEffect(() => {
     api.get('/api/testimonials').then(r => setItems(r.data)).catch(() => {});
-  }, []);
+  }, [refresh]);
 
   if (items.length === 0) return null;
 

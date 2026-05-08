@@ -6,6 +6,7 @@ import Footer from '../components/Footer';
 import FloatingButtons from '../components/FloatingButtons';
 import ApartmentCard from '../components/ApartmentCard';
 import CTABar from '../components/CTABar';
+import { useRefreshSignal } from '../contexts/RefreshContext';
 
 const PRICE_RANGES = [
   { label: 'Tất cả giá', value: '' },
@@ -19,6 +20,7 @@ export default function ProjectPage() {
   const { slug } = useParams();
   const [searchParams] = useSearchParams();
   const listingType = searchParams.get('loai') || 'ban';
+  const refresh = useRefreshSignal();
 
   const [project, setProject] = useState(null);
   const [apartments, setApartments] = useState([]);
@@ -40,7 +42,6 @@ export default function ProjectPage() {
       })
     ]).then(([projRes, aptRes]) => {
       setProject(projRes.data);
-      // If no apartments via parent_slug, try project_slug directly
       if (aptRes.data.length === 0) {
         return api.get('/api/apartments', {
           params: { project_slug: slug, listing_type: listingType }
@@ -49,7 +50,7 @@ export default function ProjectPage() {
       setApartments(aptRes.data);
     }).catch(() => {})
     .finally(() => setLoading(false));
-  }, [slug, listingType]);
+  }, [slug, listingType, refresh]);
 
   const filtered = apartments.filter(a => {
     if (filterBed && String(a.bedrooms) !== String(filterBed)) return false;

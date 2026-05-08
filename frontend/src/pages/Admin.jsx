@@ -75,6 +75,138 @@ function Field({ label, required, children, hint }) {
 const inputCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary';
 const selectCls = 'w-full border border-gray-200 rounded-lg px-3 py-2 text-sm focus:outline-none focus:border-primary bg-white';
 
+// ─── Image Upload ─────────────────────────────────────────────────────────────
+
+function ImageUpload({ value, onChange, label = 'Ảnh' }) {
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState('');
+
+  const handleFile = async (e) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    setErr('');
+    setUploading(true);
+    try {
+      const fd = new FormData();
+      fd.append('file', file);
+      const res = await fetch('/api/admin/upload', {
+        method: 'POST',
+        headers: { 'x-admin-key': ADMIN_PASSWORD },
+        body: fd,
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.message || 'Upload thất bại');
+      onChange(data.url);
+    } catch (ex) {
+      setErr(ex.message);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  return (
+    <div className="space-y-1.5">
+      {value && (
+        <div className="relative w-full h-28 rounded-lg overflow-hidden bg-gray-100 border border-gray-200">
+          <img src={value} alt="" className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; }} />
+          <button type="button" onClick={() => onChange('')}
+            className="absolute top-1 right-1 bg-black/50 text-white rounded-full w-5 h-5 flex items-center justify-center text-xs hover:bg-black/70 transition-colors">
+            ×
+          </button>
+        </div>
+      )}
+      <label className={`flex items-center gap-2 cursor-pointer w-full border-2 border-dashed rounded-lg px-3 py-2 text-sm transition-colors ${uploading ? 'border-gray-200 text-gray-400' : 'border-gray-300 text-gray-500 hover:border-primary hover:text-primary'}`}>
+        {uploading ? (
+          <><Spinner /> Đang upload...</>
+        ) : (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+            </svg>
+            {value ? 'Đổi ảnh' : 'Chọn ảnh'}
+          </>
+        )}
+        <input type="file" accept="image/*" className="hidden" disabled={uploading} onChange={handleFile} />
+      </label>
+      {err && <p className="text-red-500 text-xs">{err}</p>}
+    </div>
+  );
+}
+
+// ─── Multi Image Upload ────────────────────────────────────────────────────────
+
+function MultiImageUpload({ value, onChange }) {
+  const urls = typeof value === 'string' ? value.split('\n').map(s => s.trim()).filter(Boolean) : (value || []);
+  const [uploading, setUploading] = useState(false);
+  const [err, setErr] = useState('');
+
+  const handleFile = async (e) => {
+    const files = Array.from(e.target.files || []);
+    if (!files.length) return;
+    setErr('');
+    setUploading(true);
+    try {
+      const results = [];
+      for (const file of files) {
+        const fd = new FormData();
+        fd.append('file', file);
+        const res = await fetch('/api/admin/upload', {
+          method: 'POST',
+          headers: { 'x-admin-key': ADMIN_PASSWORD },
+          body: fd,
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.message || 'Upload thất bại');
+        results.push(data.url);
+      }
+      onChange([...urls, ...results].join('\n'));
+    } catch (ex) {
+      setErr(ex.message);
+    } finally {
+      setUploading(false);
+      e.target.value = '';
+    }
+  };
+
+  const remove = (idx) => {
+    const next = urls.filter((_, i) => i !== idx);
+    onChange(next.join('\n'));
+  };
+
+  return (
+    <div className="space-y-1.5">
+      {urls.length > 0 && (
+        <div className="flex flex-wrap gap-2">
+          {urls.map((u, i) => (
+            <div key={i} className="relative w-20 h-16 rounded-lg overflow-hidden bg-gray-100 border border-gray-200 shrink-0">
+              <img src={u} alt="" className="w-full h-full object-cover" onError={e => { e.target.style.display = 'none'; }} />
+              <button type="button" onClick={() => remove(i)}
+                className="absolute top-0 right-0 bg-black/50 text-white w-4 h-4 flex items-center justify-center text-xs hover:bg-black/70 transition-colors">
+                ×
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      <label className={`flex items-center gap-2 cursor-pointer w-full border-2 border-dashed rounded-lg px-3 py-2 text-sm transition-colors ${uploading ? 'border-gray-200 text-gray-400' : 'border-gray-300 text-gray-500 hover:border-primary hover:text-primary'}`}>
+        {uploading ? (
+          <><Spinner /> Đang upload...</>
+        ) : (
+          <>
+            <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" />
+            </svg>
+            Thêm ảnh ({urls.length} ảnh)
+          </>
+        )}
+        <input type="file" accept="image/*" multiple className="hidden" disabled={uploading} onChange={handleFile} />
+      </label>
+      {err && <p className="text-red-500 text-xs">{err}</p>}
+    </div>
+  );
+}
+
 // ─── Apartment Form ───────────────────────────────────────────────────────────
 
 const EMPTY_APT = {
@@ -226,14 +358,11 @@ function ApartmentForm({ initial, projects, onSave, onClose }) {
       </Field>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        <Field label="Ảnh bìa (URL)">
-          <input className={inputCls} value={form.image} onChange={e => set('image', e.target.value)}
-            placeholder="https://images.unsplash.com/..." />
+        <Field label="Ảnh bìa">
+          <ImageUpload value={form.image} onChange={v => set('image', v)} />
         </Field>
-        <Field label="Ảnh chi tiết (mỗi URL 1 dòng)">
-          <textarea className={inputCls} rows={2} value={form.images}
-            onChange={e => set('images', e.target.value)}
-            placeholder={'https://...\nhttps://...'} />
+        <Field label="Ảnh chi tiết (nhiều ảnh)">
+          <MultiImageUpload value={form.images} onChange={v => set('images', v)} />
         </Field>
       </div>
 
@@ -293,9 +422,8 @@ function TestimonialForm({ initial, onSave, onClose }) {
           <input className={inputCls} value={form.location} onChange={e => set('location', e.target.value)} placeholder="Hoàng Mai" />
         </Field>
       </div>
-      <Field label="URL ảnh đại diện">
-        <input className={inputCls} value={form.avatar} onChange={e => set('avatar', e.target.value)}
-          placeholder="https://randomuser.me/api/portraits/men/1.jpg" />
+      <Field label="Ảnh đại diện">
+        <ImageUpload value={form.avatar} onChange={v => set('avatar', v)} />
       </Field>
       <Field label="Nội dung đánh giá" required>
         <textarea className={inputCls} rows={3} required value={form.content}
@@ -372,14 +500,12 @@ function ProjectForm({ initial, projects, onSave, onClose }) {
           </select>
         </Field>
       )}
-      <div className="grid grid-cols-2 gap-3">
-        <Field label="Số căn">
-          <input className={inputCls} value={form.count_text} onChange={e => set('count_text', e.target.value)} placeholder="50+ căn" />
-        </Field>
-        <Field label="URL ảnh đại diện">
-          <input className={inputCls} value={form.image} onChange={e => set('image', e.target.value)} placeholder="https://..." />
-        </Field>
-      </div>
+      <Field label="Số căn">
+        <input className={inputCls} value={form.count_text} onChange={e => set('count_text', e.target.value)} placeholder="50+ căn" />
+      </Field>
+      <Field label="Ảnh đại diện dự án">
+        <ImageUpload value={form.image} onChange={v => set('image', v)} />
+      </Field>
       <Field label="Mô tả">
         <textarea className={inputCls} rows={2} value={form.description}
           onChange={e => set('description', e.target.value)} placeholder="Khu đô thị..." />
