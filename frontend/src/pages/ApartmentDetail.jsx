@@ -37,7 +37,7 @@ export default function ApartmentDetail() {
     if (!form.phone) return;
     await api.post('/api/contacts', {
       phone: form.phone,
-      area: apt?.area_slug,
+      area: apt?.project_slug,
       message: `Quan tâm căn: ${apt?.title}. ${form.message}`,
     }).catch(() => {});
     setSent(true);
@@ -57,7 +57,7 @@ export default function ApartmentDetail() {
         <nav className="text-sm text-gray-500 mb-4 flex items-center gap-1">
           <Link to="/" className="hover:text-primary">Trang chủ</Link>
           <span>/</span>
-          <Link to={`/${apt.area_slug}`} className="hover:text-primary">{apt.area_name}</Link>
+          <Link to={`/du-an/${apt.project_slug}`} className="hover:text-primary">{apt.project_name}</Link>
           <span>/</span>
           <span className="text-gray-800 font-medium truncate max-w-xs">{apt.title}</span>
         </nav>
@@ -107,7 +107,9 @@ export default function ApartmentDetail() {
             {/* Info card */}
             <div className="bg-white rounded-xl shadow-sm p-6 mb-6">
               <h1 className="text-xl md:text-2xl font-bold text-primary mb-2">{apt.title}</h1>
-              <p className="text-accent font-extrabold text-2xl mb-4">{formatPrice(apt.price)}</p>
+              <p className={`font-extrabold text-2xl mb-4 ${apt.listing_type === 'thue' ? 'text-green-600' : 'text-accent'}`}>
+                {apt.price_display}
+              </p>
 
               <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6 pb-6 border-b border-gray-100">
                 {[
@@ -117,7 +119,7 @@ export default function ApartmentDetail() {
                   { label: 'Tầng', value: apt.floor || '—' },
                   { label: 'Hướng', value: apt.direction || '—' },
                   { label: 'Pháp lý', value: apt.legal || '—' },
-                  { label: 'Khu vực', value: apt.area_name },
+                  { label: 'Khu vực', value: apt.project_name },
                   { label: 'Quận/Huyện', value: apt.district },
                 ].map(item => (
                   <div key={item.label} className="bg-gray-50 rounded-lg p-3">
@@ -169,12 +171,12 @@ export default function ApartmentDetail() {
               )}
 
               <div className="mt-5 pt-5 border-t border-gray-100 space-y-3">
-                <a href="tel:0973123456"
+                <a href="tel:0973883550"
                   className="flex items-center justify-center gap-2 w-full border-2 border-primary text-primary font-bold py-2.5 rounded-lg hover:bg-primary hover:text-white transition-colors text-sm">
                   <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                     <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
                   </svg>
-                  Gọi ngay: 0973 123 456
+                  Gọi ngay: 0973 883 550
                 </a>
               </div>
             </div>

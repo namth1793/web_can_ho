@@ -11,6 +11,7 @@ app.use(express.json());
 setupDatabase();
 
 app.use('/api/apartments', require('./routes/apartments'));
+app.use('/api/projects', require('./routes/projects'));
 app.use('/api/areas', require('./routes/areas'));
 app.use('/api/contacts', require('./routes/contacts'));
 app.use('/api/testimonials', require('./routes/testimonials'));
