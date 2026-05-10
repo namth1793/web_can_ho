@@ -3,6 +3,7 @@ import api from '../lib/api';
 
 const ADMIN_PASSWORD = 'oanhomes2024';
 const H = { 'x-admin-key': ADMIN_PASSWORD };
+const API_BASE = import.meta.env.VITE_API_URL || '';
 
 // ─── Helpers ─────────────────────────────────────────────────────────────────
 
@@ -89,7 +90,7 @@ function ImageUpload({ value, onChange, label = 'Ảnh' }) {
     try {
       const fd = new FormData();
       fd.append('file', file);
-      const res = await fetch('/api/admin/upload', {
+      const res = await fetch(`${API_BASE}/api/admin/upload`, {
         method: 'POST',
         headers: { 'x-admin-key': ADMIN_PASSWORD },
         body: fd,
@@ -151,7 +152,7 @@ function MultiImageUpload({ value, onChange }) {
       for (const file of files) {
         const fd = new FormData();
         fd.append('file', file);
-        const res = await fetch('/api/admin/upload', {
+        const res = await fetch(`${API_BASE}/api/admin/upload`, {
           method: 'POST',
           headers: { 'x-admin-key': ADMIN_PASSWORD },
           body: fd,
