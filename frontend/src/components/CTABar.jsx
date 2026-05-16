@@ -10,14 +10,14 @@ export default function CTABar() {
             <p className="text-white/70 text-sm">Gọi ngay để được tư vấn và xem nhà miễn phí</p>
           </div>
           <div className="flex flex-wrap gap-3">
-            <a href="tel:0973123456"
+            <a href="tel:0973883550"
               className="flex items-center gap-2 bg-accent text-white font-bold px-5 py-3 rounded-lg hover:bg-red-700 transition-colors text-sm shadow">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                 <path d="M2 3a1 1 0 011-1h2.153a1 1 0 01.986.836l.74 4.435a1 1 0 01-.54 1.06l-1.548.773a11.037 11.037 0 006.105 6.105l.774-1.548a1 1 0 011.059-.54l4.435.74a1 1 0 01.836.986V17a1 1 0 01-1 1h-2C7.82 18 2 12.18 2 5V3z" />
               </svg>
-              GỌI NGAY 0973 123 456
+              GỌI NGAY 0973 883 550
             </a>
-            <a href="https://zalo.me/0973123456" target="_blank" rel="noreferrer"
+            <a href="https://zalo.me/0973883550" target="_blank" rel="noreferrer"
               className="flex items-center gap-2 bg-blue-500 text-white font-bold px-5 py-3 rounded-lg hover:bg-blue-600 transition-colors text-sm shadow">
               <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
                 <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z" />
